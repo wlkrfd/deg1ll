@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лучший клип | Deg1ll</title>
+    <title>Future Vision | Digital Experience</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
 
@@ -12,9 +12,7 @@
             --accent-glow: rgba(188, 19, 254, 0.5);
             --bg-dark: #050505;
             --text-main: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --transition-base: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            --transition-base: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         * {
@@ -30,6 +28,7 @@
             font-family: 'Inter', sans-serif;
             overflow: hidden;
             height: 100vh;
+            width: 100vw;
         }
 
         /* --- Background Slideshow --- */
@@ -52,13 +51,13 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transform: scale(1.1);
+            transform: scale(1.2) rotate(0.01deg);
             transition: opacity 2s ease-in-out, transform 8s linear;
         }
 
         .slide.active {
-            opacity: 0.2;
-            transform: scale(1);
+            opacity: 1;
+            transform: scale(1.05) translateZ(0);
         }
 
         #overlay {
@@ -67,83 +66,151 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 100%);
+            background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
+            backdrop-filter: brightness(0.7);
             z-index: -1;
         }
 
-        /* --- Layout --- */
-        .page-wrapper {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100%;
-            padding: 40px 5%;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 5;
-            animation: pageSlideUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        @keyframes pageSlideUp {
-            from { opacity: 0; transform: translateY(60px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            color: var(--accent-color);
-            text-shadow: 0 0 15px var(--accent-glow);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-align: center;
-        }
-
-        /* --- Video Player Container --- */
-        .video-container {
-            width: 100%;
-            max-width: 1400px;
-            height: 80vh;
-            position: relative;
-            border-radius: 30px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 20px var(--accent-glow);
-            background: #000;
-        }
-
-        video {
+        /* --- Canvas Particles --- */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            display: block;
-            outline: none;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        /* --- Back Button --- */
-        .back-btn {
-            position: fixed;
-            top: 40px;
-            left: 5%;
+        /* --- Main Content --- */
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            perspective: 1000px;
+        }
+
+        .hero-content {
+            opacity: 0;
+            transform: translateY(60px);
+            animation: reveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.5s;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff 40%, rgba(255,255,255,0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(188, 19, 254, 0.3));
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        /* --- Premium Neon Button --- */
+        .neon-btn {
+            position: relative;
+            padding: 20px 60px;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: #fff;
-            text-decoration: none;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            opacity: 0.5;
-            transition: 0.3s;
-            z-index: 100;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: var(--transition-base);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .back-btn:hover {
-            opacity: 1;
+        .neon-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .neon-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--accent-color);
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: 0 0 20px var(--accent-glow), inset 0 0 10px var(--accent-glow);
             color: var(--accent-color);
-            text-shadow: 0 0 10px var(--accent-glow);
+            letter-spacing: 5px;
         }
 
+        .neon-btn:hover::before {
+            left: 100%;
+        }
+
+        .neon-btn:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 0 10px var(--accent-glow);
+            filter: hue-rotate(45deg);
+        }
+
+        /* Edge Glow Pulse */
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition-base);
+            border: 1px solid var(--accent-color);
+            filter: blur(8px);
+        }
+
+        .neon-btn:hover .btn-glow {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- Animations --- */
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* --- Media Queries --- */
         @media (max-width: 768px) {
-            h2 { font-size: 1.5rem; }
-            .video-container { border-radius: 15px; }
+            h1 { font-size: 4rem; }
+            p { letter-spacing: 2px; }
+            .neon-btn { padding: 15px 40px; }
         }
     </style>
 </head>
@@ -151,48 +218,117 @@
 
     <div id="bg-viewport"></div>
     <div id="overlay"></div>
+    <canvas id="particles"></canvas>
 
-    <a href="../hub.html" class="back-btn">← RETURN TO HUB</a>
-
-    <div class="page-wrapper">
-        <h2>Лучший клип</h2>
-        
-        <div class="video-container">
-            <video controls autoplay loop>
-                <source src="0331.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+    <div class="container">
+        <div class="hero-content" id="hero">
+            <p>живая легенда</p>
+            <h1>Deg1ll</h1>
+            <p style="margin-top: -10px; opacity: 0.4; font-size: 0.8rem;">к сожалению</p>
+            
+            <a href="hub.html" style="text-decoration: none;">
+                <button class="neon-btn">
+                    Архив
+                    <div class="btn-glow"></div>
+                </button>
+            </a>
         </div>
     </div>
 
     <script>
-        // Background Slideshow
-        const bgImages = [
-            '../photo_2026-01-11_20-35-45.jpg',
-            '../photo_2026-01-11_20-36-02.jpg',
-            '../photo_2026-01-11_20-36-52.jpg'
+        // --- Configuration ---
+        const backgroundImages = [
+            'photo_2026-01-11_20-35-45.jpg',
+            'photo_2026-01-11_20-36-02.jpg',
+            'photo_2026-01-11_20-36-52.jpg'
         ];
 
-        const bgViewport = document.getElementById('bg-viewport');
-        let currentBgIndex = 0;
-        let bgSlides = [];
+        // --- Slideshow Logic ---
+        const viewport = document.getElementById('bg-viewport');
+        let currentSlideIndex = 0;
+        let slides = [];
 
-        function initBg() {
-            bgImages.forEach((url, i) => {
+        function initSlideshow() {
+            backgroundImages.forEach((url, i) => {
                 const slide = document.createElement('div');
                 slide.className = `slide ${i === 0 ? 'active' : ''}`;
                 slide.style.backgroundImage = `url('${url}')`;
-                bgViewport.appendChild(slide);
-                bgSlides.push(slide);
+                viewport.appendChild(slide);
+                slides.push(slide);
             });
-            setInterval(() => {
-                bgSlides[currentBgIndex].classList.remove('active');
-                currentBgIndex = (currentBgIndex + 1) % bgSlides.length;
-                bgSlides[currentBgIndex].classList.add('active');
-            }, 6000);
+
+            setInterval(nextSlide, 6000);
         }
 
-        initBg();
+        function nextSlide() {
+            slides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            slides[currentSlideIndex].classList.add('active');
+        }
+
+        // --- Ambient Particles ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.alpha = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 242, 255, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function setupParticles() {
+            for (let i = 0; i < 80; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // --- Interactive Mouse Effect ---
+        const hero = document.getElementById('hero');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+            hero.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // --- Initialize ---
+        window.addEventListener('resize', resize);
+        resize();
+        initSlideshow();
+        setupParticles();
+        animate();
     </script>
 </body>
 </html>
