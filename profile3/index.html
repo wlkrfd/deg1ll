@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СОЦСЕТИ | Deg1ll</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+
+        :root {
+            --accent-color: #bc13fe;
+            --accent-glow: rgba(188, 19, 254, 0.5);
+            --bg-dark: #050505;
+            --text-main: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition-base: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* --- Background Slideshow --- */
+        #bg-viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: opacity 2s ease-in-out, transform 8s linear;
+        }
+
+        .slide.active {
+            opacity: 0.3;
+            transform: scale(1);
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--bg-dark) 0%, transparent 50%, var(--bg-dark) 100%);
+            z-index: -1;
+        }
+
+        /* --- Layout --- */
+        .page-wrapper {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            padding: 40px 5%;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            z-index: 5;
+            animation: pageSlideUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes pageSlideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Social Window (Left) --- */
+        .social-window {
+            flex: 1;
+            max-width: 500px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 50px;
+            backdrop-filter: blur(30px);
+            box-shadow: 0 0 40px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
+        }
+
+        .social-window h2 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: 900;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2rem;
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            transition: var(--transition-base);
+            letter-spacing: 1px;
+        }
+
+        .social-item i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            transition: 0.3s;
+        }
+
+        .social-item:hover {
+            background: rgba(188, 19, 254, 0.1);
+            border-color: var(--accent-color);
+            transform: translateX(10px);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .social-item:hover i {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        /* --- Photo Container (Right) --- */
+        .photo-container {
+            flex: 1.5;
+            height: 80vh;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            background-image: url('photo_2026-03-31_19-16-14.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .photo-placeholder {
+            display: none;
+        }
+
+        /* --- Back Button --- */
+        .back-btn {
+            position: fixed;
+            top: 40px;
+            left: 5%;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        @media (max-width: 1024px) {
+            .page-wrapper { flex-direction: column-reverse; overflow-y: auto; height: auto; padding-top: 100px; }
+            .social-window { max-width: 100%; width: 100%; }
+            .photo-container { width: 100%; min-height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-viewport"></div>
+    <div id="overlay"></div>
+
+    <a href="../hub.html" class="back-btn">← RETURN TO HUB</a>
+
+    <div class="page-wrapper">
+        <div class="social-window">
+            <h2>СОЦСЕТИ</h2>
+            <div class="social-links">
+                <a href="https://t.me/DeG1ll" target="_blank" class="social-item">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </a>
+                <a href="https://www.tiktok.com/@deg1ll" target="_blank" class="social-item">
+                    <i class="fab fa-tiktok"></i>
+                    <span>Tiktok</span>
+                </a>
+                <a href="https://soundcloud.com/deg1ll" target="_blank" class="social-item">
+                    <i class="fab fa-soundcloud"></i>
+                    <span>Soundcloud</span>
+                </a>
+                <a href="https://www.twitch.tv/deg1ll" target="_blank" class="social-item">
+                    <i class="fab fa-twitch"></i>
+                    <span>Twitch</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-placeholder">
+                Photo Asset Missing // Upload Pending
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bgImages = [
+            '../photo_2026-01-11_20-35-45.jpg',
+            '../photo_2026-01-11_20-36-02.jpg',
+            '../photo_2026-01-11_20-36-52.jpg'
+        ];
+
+        const bgViewport = document.getElementById('bg-viewport');
+        let currentBgIndex = 0;
+        let bgSlides = [];
+
+        function initBg() {
+            bgImages.forEach((url, i) => {
+                const slide = document.createElement('div');
+                slide.className = `slide ${i === 0 ? 'active' : ''}`;
+                slide.style.backgroundImage = `url('${url}')`;
+                bgViewport.appendChild(slide);
+                bgSlides.push(slide);
+            });
+            setInterval(() => {
+                bgSlides[currentBgIndex].classList.remove('active');
+                currentBgIndex = (currentBgIndex + 1) % bgSlides.length;
+                bgSlides[currentBgIndex].classList.add('active');
+            }, 6000);
+        }
+
+        initBg();
+    </script>
+</body>
+</html>

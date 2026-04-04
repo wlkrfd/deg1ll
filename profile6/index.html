@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фото с братвой | Deg1ll</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+
+        :root {
+            --accent-color: #bc13fe;
+            --accent-glow: rgba(188, 19, 254, 0.5);
+            --bg-dark: #050505;
+            --text-main: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition-base: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Background Slideshow --- */
+        #bg-viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: opacity 2s ease-in-out, transform 8s linear;
+        }
+
+        .slide.active {
+            opacity: 0.2;
+            transform: scale(1);
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 100%);
+            z-index: -1;
+        }
+
+        /* --- Layout --- */
+        .page-wrapper {
+            padding: 40px 2% 40px 4%; /* Reduced top, small right, generous left margin */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align everything to the left */
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            animation: pageSlideUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes pageSlideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 4rem); /* Responsive title size */
+            margin-bottom: 30px;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-align: left; /* Left align title */
+            width: 100%;
+        }
+
+        /* --- Photo Grid --- */
+        .gallery-grid {
+            display: grid;
+            /* Adaptive columns: wider on high-res, narrower on mobile */
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 25px;
+            width: 100%;
+            padding-right: 2%; /* Gap at the very end of the page */
+        }
+
+        /* Special scaling for 4K/Ultra-wide */
+        @media (min-width: 2500px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 16/10; /* More cinematic ratio for wide screens */
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: var(--transition-base);
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05) translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
+            z-index: 10;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Lightbox --- */
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        #lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #lightbox-img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 10px;
+            box-shadow: 0 0 50px var(--accent-glow);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #lightbox.active #lightbox-img {
+            transform: scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        /* --- Back Button --- */
+        .back-btn {
+            position: fixed;
+            top: 40px;
+            left: 5%;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        @media (max-width: 768px) {
+            h2 { font-size: 2rem; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-viewport"></div>
+    <div id="overlay"></div>
+
+    <a href="../hub.html" class="back-btn">← RETURN TO HUB</a>
+
+    <div class="page-wrapper">
+        <h2>Фото с братвой</h2>
+        <div class="gallery-grid" id="gallery">
+            <!-- Items injected by JS -->
+        </div>
+    </div>
+
+    <div id="lightbox">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+        // Background Slideshow
+        const bgImages = [
+            '../photo_2026-01-11_20-35-45.jpg',
+            '../photo_2026-01-11_20-36-02.jpg',
+            '../photo_2026-01-11_20-36-52.jpg'
+        ];
+
+        const bgViewport = document.getElementById('bg-viewport');
+        let currentBgIndex = 0;
+        let bgSlides = [];
+
+        function initBg() {
+            bgImages.forEach((url, i) => {
+                const slide = document.createElement('div');
+                slide.className = `slide ${i === 0 ? 'active' : ''}`;
+                slide.style.backgroundImage = `url('${url}')`;
+                bgViewport.appendChild(slide);
+                bgSlides.push(slide);
+            });
+            setInterval(() => {
+                bgSlides[currentBgIndex].classList.remove('active');
+                currentBgIndex = (currentBgIndex + 1) % bgSlides.length;
+                bgSlides[currentBgIndex].classList.add('active');
+            }, 6000);
+        }
+
+        // Gallery Logic
+        const photoFiles = [
+            'photo_1_2026-03-31_19-54-45.jpg', 'photo_2_2026-03-31_19-54-45.jpg', 
+            'photo_3_2026-03-31_19-54-45.jpg', 'photo_4_2026-03-31_19-54-45.jpg',
+            'photo_5_2026-03-31_19-54-45.jpg', 'photo_6_2026-03-31_19-54-45.jpg',
+            'photo_7_2026-03-31_19-54-45.jpg', 'photo_8_2026-03-31_19-54-45.jpg',
+            'photo_9_2026-03-31_19-54-45.jpg', 'photo_10_2026-03-31_19-54-45.jpg',
+            'photo_11_2026-03-31_19-54-45.jpg', 'photo_12_2026-03-31_19-54-45.jpg',
+            'photo_13_2026-03-31_19-54-45.jpg', 'photo_14_2026-03-31_19-54-45.jpg',
+            'photo_15_2026-03-31_19-54-45.jpg', 'photo_16_2026-03-31_19-54-45.jpg',
+            'photo_17_2026-03-31_19-54-45.jpg', 'photo_18_2026-03-31_19-54-45.jpg'
+        ];
+
+        const gallery = document.getElementById('gallery');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function initGallery() {
+            photoFiles.forEach((file, i) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.style.backgroundImage = `url('${file}')`;
+                item.style.animationDelay = `${i * 0.05}s`;
+                item.onclick = () => openLightbox(file);
+                gallery.appendChild(item);
+            });
+        }
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        lightbox.onclick = (e) => {
+            if (e.target !== lightboxImg) closeLightbox();
+        }
+
+        initBg();
+        initGallery();
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+# Project History: Project1 Development (Comprehensive Log)
+
+## Date: 2026-03-31
+## Project Name: Project1
+## Status: Final Phase
+
+### Major Milestones:
+
+1.  **Identity & Aesthetic Shift:**
+    *   Renamed main entity from "Digital Future" to **Deg1ll**.
+    *   Transitioned the entire project from Cyan Neon to **Premium Violet Neon (#bc13fe)**.
+    *   Implemented global **slideshow backgrounds** using high-quality local images with zoom/fade transitions.
+
+2.  **Architecture & Navigation:**
+    *   Created a central **Hub (`hub.html`)** with interactive glassmorphism cards.
+    *   Established a modular folder structure (`profile1/` to `profile6/`) for individual profiles.
+    *   Implemented a unified **Slide-Up Entry Animation** for all page transitions.
+
+3.  **Detailed Profile Implementations:**
+    *   **Profile 1 (мерч Deg1ll):** Dedicated merch page with photo and "дрявый иван" collection details.
+    *   **Profile 2 (Лучшая девушка гиля):** Full-screen interactive carousel gallery with 3 images.
+    *   **Profile 3 (СОЦСЕТИ):** Sleek link hub with Font Awesome icons for Telegram, Tiktok, Soundcloud, and Twitch.
+    *   **Profile 4 (Фанати Гиля):** High-capacity carousel gallery containing 26 fan-submitted photos.
+    *   **Profile 5 (Лучший клип):** Large-scale, full-screen video player for `0331.mp4` with neon borders.
+    *   **Profile 6 (Фото с братвой):** Sophisticated grid gallery with a custom Lightbox viewer and background dimming.
+
+4.  **Technical Highlights:**
+    *   **Lightbox System:** Custom JS implementation for full-screen photo viewing in Profile 6.
+    *   **Responsive Engine:** All galleries and players are fully adaptive for mobile/tablet.
+    *   **Performance:** Canvas-based particle systems and CSS-driven animations optimized for 60fps.
+
+### Current File Structure:
+- `index.html`: Home page ("Архив" button).
+- `hub.html`: Main navigation dashboard.
+- `profile1.html`: Merch profile.
+- `profile2/`: Directory for Girlfriend gallery.
+- `profile3/`: Directory for Social networks.
+- `profile4/`: Directory for Fan gallery.
+- `profile5/`: Directory for Video player.
+- `profile6/`: Directory for Friends gallery (Lightbox enabled).
+- `PROJECT_LOG.txt`: This development record.

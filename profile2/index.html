@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лучшая девушка гиля | Gallery</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+
+        :root {
+            --accent-color: #bc13fe;
+            --accent-glow: rgba(188, 19, 254, 0.5);
+            --bg-dark: #050505;
+            --text-main: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition-base: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* --- Background Slideshow --- */
+        #bg-viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: opacity 2s ease-in-out, transform 8s linear;
+        }
+
+        .slide.active {
+            opacity: 0.2;
+            transform: scale(1);
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 100%);
+            z-index: -1;
+        }
+
+        /* --- Layout --- */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            padding: 40px 5%;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 5;
+            animation: pageSlideUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes pageSlideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+
+        /* --- Carousel Container --- */
+        .carousel-container {
+            width: 100%;
+            max-width: 800px;
+            height: 70vh;
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 20px var(--accent-glow);
+        }
+
+        .carousel-track {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95);
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- Navigation --- */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition-base);
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: black;
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        .prev { left: 20px; }
+        .next { right: 20px; }
+
+        .indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* --- Back Button --- */
+        .back-btn {
+            position: fixed;
+            top: 40px;
+            left: 5%;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-container { height: 50vh; }
+            h2 { font-size: 1.5rem; }
+            .nav-btn { width: 40px; height: 40px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-viewport"></div>
+    <div id="overlay"></div>
+
+    <a href="../hub.html" class="back-btn">← RETURN TO HUB</a>
+
+    <div class="page-wrapper">
+        <h2>Лучшая девушка гиля</h2>
+        
+        <div class="carousel-container">
+            <button class="nav-btn prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="nav-btn next" onclick="changeSlide(1)">&#10095;</button>
+            
+            <div class="carousel-track" id="track">
+                <!-- Slides injected by JS -->
+            </div>
+
+            <div class="indicators" id="indicators">
+                <!-- Dots injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background Slideshow
+        const bgImages = [
+            '../photo_2026-01-11_20-35-45.jpg',
+            '../photo_2026-01-11_20-36-02.jpg',
+            '../photo_2026-01-11_20-36-52.jpg'
+        ];
+
+        const bgViewport = document.getElementById('bg-viewport');
+        let currentBgIndex = 0;
+        let bgSlides = [];
+
+        function initBg() {
+            bgImages.forEach((url, i) => {
+                const slide = document.createElement('div');
+                slide.className = `slide ${i === 0 ? 'active' : ''}`;
+                slide.style.backgroundImage = `url('${url}')`;
+                bgViewport.appendChild(slide);
+                bgSlides.push(slide);
+            });
+            setInterval(() => {
+                bgSlides[currentBgIndex].classList.remove('active');
+                currentBgIndex = (currentBgIndex + 1) % bgSlides.length;
+                bgSlides[currentBgIndex].classList.add('active');
+            }, 6000);
+        }
+
+        // Profile Carousel
+        const profileImages = [
+            'photo_2026-03-31_19-00-08.jpg',
+            'photo_2026-03-31_19-00-23.jpg',
+            'photo_2026-03-31_19-00-27.jpg'
+        ];
+
+        const track = document.getElementById('track');
+        const indicators = document.getElementById('indicators');
+        let currentSlide = 0;
+        let slides = [];
+        let dots = [];
+
+        function initCarousel() {
+            profileImages.forEach((url, i) => {
+                const slide = document.createElement('div');
+                slide.className = `carousel-slide ${i === 0 ? 'active' : ''}`;
+                slide.style.backgroundImage = `url('${url}')`;
+                track.appendChild(slide);
+                slides.push(slide);
+
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(i);
+                indicators.appendChild(dot);
+                dots.push(dot);
+            });
+        }
+
+        function changeSlide(direction) {
+            let next = currentSlide + direction;
+            if (next >= slides.length) next = 0;
+            if (next < 0) next = slides.length - 1;
+            goToSlide(next);
+        }
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        initBg();
+        initCarousel();
+    </script>
+</body>
+</html>
