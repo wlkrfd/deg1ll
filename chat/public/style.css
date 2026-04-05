@@ -1,0 +1,141 @@
+/* СБРОС СТИЛЕЙ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0d0d0d; /* Темный фон */
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a0a25 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* КОНТЕЙНЕР ЧАТА (Glassmorphism) */
+.chat-container {
+    width: 90%;
+    max-width: 600px;
+    height: 80vh;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(188, 19, 254, 0.2); /* Фиолетовая граница #bc13fe */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(188, 19, 254, 0.1);
+}
+
+/* ШАПКА */
+.chat-header {
+    padding: 20px;
+    background: rgba(188, 19, 254, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(188, 19, 254, 0.2);
+}
+
+.chat-header h1 {
+    font-size: 20px;
+}
+
+.chat-header h1 span {
+    color: #bc13fe; /* Фиолетовый неон */
+    text-shadow: 0 0 10px #bc13fe;
+}
+
+.status {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.online { background: rgba(0, 255, 0, 0.2); color: #00ff00; }
+.offline { background: rgba(255, 0, 0, 0.2); color: #ff0000; }
+
+/* ОКНО СООБЩЕНИЙ */
+.chat-window {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Прокрутка */
+.chat-window::-webkit-scrollbar { width: 5px; }
+.chat-window::-webkit-scrollbar-track { background: transparent; }
+.chat-window::-webkit-scrollbar-thumb { background: #bc13fe; border-radius: 10px; }
+
+/* Сообщение */
+.msg-bubble {
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid #bc13fe;
+    border-radius: 0 10px 10px 0;
+    max-width: 80%;
+}
+
+.msg-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 5px;
+    opacity: 0.7;
+}
+
+.msg-user { color: #bc13fe; font-weight: bold; }
+
+/* ПОДВАЛ (ВВОД) */
+.chat-footer {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    gap: 10px;
+}
+
+#username {
+    width: 80px;
+    background: transparent;
+    border: 1px solid rgba(188, 19, 254, 0.3);
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#message-input {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(188, 19, 254, 0.3);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+}
+
+#message-input:focus {
+    border-color: #bc13fe;
+}
+
+#send-btn {
+    background: #bc13fe;
+    color: #fff;
+    border: none;
+    padding: 0 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#send-btn:hover {
+    background: #a00ee0;
+    box-shadow: 0 0 15px #bc13fe;
+}
